@@ -12,13 +12,23 @@ function each(collection, func) {
   }
 }
 /******************/
-function filter(array, predicate) {
+function filter(coll, predicate) {
   let acc = [];
-  each(array, function(element, index) {
-    if(predicate(element)) {
-      acc.push(element);
-    }
-  });
+  if(!(Array.isArray(coll))) {
+    acc = {};
+    each(coll, function(element, index) {
+      if(predicate(element, index)) {
+        acc[index] = element;
+       }
+      });
+  }else {
+    each(coll, function(element, index) {
+      if(predicate(element, index)) {
+        acc.push(element);
+      }
+    });
+  }
+  
   return acc;
 }
 /**************************************************/
@@ -135,3 +145,106 @@ function startsWithChar(array, caracter)  {
  evenIndexedEvenLengths(['red', 'green', 'purple', 'blue', 'yellow']); 
        // => ['purple', 'yellow']
 */
+function evenIndexedEvenLengths(strings) {
+  
+  return filter(strings, function(element, index) {
+    if( (element.length % 2 === 0) && (index % 2 === 0) ) {
+      return element;
+    }
+  });
+}
+/*******************************************************************/
+/*
+4. Write a version of filter that works on arrays and objects; then, use
+your updated version of filter to filter an object with values of mixed 
+types to an object with only numeric values. You should be able to use 
+your modified version of filter as follows:
+
+ filter({a: 1, b: 'dog', c: true}, function(value) { 
+       return typeof value === 'number'; 
+ }); 
+ // => {a: 1}
+*/
+function newFilter(object) {
+
+  return filter(object, function(element) {
+    
+    return typeof(element) === "number";
+  });
+}
+/**********************************************/
+/*
+5.Write function called moveZero that accepts an array of numbers as a paramerter
+and returns an array of numbers with all the zero values moved to the end 'using filter'
+
+ functoin moveZero(numbers){ 
+       // To-Do code ..  
+} 
+ moveZero([2,0,3,0,40,3,6,0,10,11]); // ==> [2,3,40,3,6,10,11,0,0,0]
+*/
+function moveZero(numbers) {
+
+  return filter(numbers, function(elem, inx) {
+    if(elem !== 0) {
+      return elem;
+    }
+  }).concat(filter(numbers, function(element, index) {
+    if(element === 0) {
+      return 1;
+    }
+  }));
+}
+/*********************************************************************/
+/*
+6.Write function called strongPasswords that accepts an array of object
+representing usersData (email, password) and retrun an array of objects 
+with the strong Password only using filter. Note: Strong password is comnied of :
+- capital letters - small letters - numbers - sumbols - at least 8 characters long
+
+ var usersData = [ 
+       { user: {email: 'majd@rbk.org', password: '_Majd(2017)'}}, 
+       { user: {email: 'fatema@rbk.org', password: '12345'}}, 
+       { user: {email: 'maher@rbk.org', password: 'M@her2017'}}, 
+       { user: {email: 'sahar@rbk.org', password: 'saher2017'}} 
+ ]; 
+ function strongPasswords(array){ 
+       //your code is here 
+ } 
+ strongPasswords(usersData); // ==> [ 
+ // { user: {email: 'maher@rbk.org', password: 'M@her2017'}}, 
+ // { user: {email: 'maher@rbk.org', password: 'M@her2017'}} 
+ // ];
+*/
+/**********************************************************************************/
+function strongPasswords(arrayOfObjects) {
+  let zeroToNine  = new Array('0', '1', '2', '3', '4', '5', '6', '7', '8', '9');
+  let symbols = new Array( '&', '!', '~', '@', '"', '#', '{', '$', '(', '[', '-', '%', '`', '_', ')', ']', '+', '/', '*', '.', ',', '?', '§', '<', '>', 'µ', '£');
+  let letter = new Array('a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z');
+  let capitalLetter = new Array('A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z');
+ //   console.log(capitalLetter);
+ /* let checkPasswordStrength = {"rExists": zeroToNine, "lExists" :symbols, "cExists" : capitalLetter, "tExits": letter};  */
+  let checkPasswordStrength = {"rExists": zeroToNine, "lExists" :letter, "cExists" : capitalLetter, "sExits": symbols};
+  
+  return filter(arrayOfObjects, function(element, index) {
+    let passwordToBechecked = element["user"]["password"];
+    let isThere = 0;
+
+   
+
+  });
+}
+
+
+
+
+
+
+
+
+
+var usersData = [ 
+  { user: {email: 'majd@rbk.org', password: '_Majd(2017)'}}, 
+  { user: {email: 'fatema@rbk.org', password: '12345'}}, 
+  { user: {email: 'maher@rbk.org', password: 'M@her2017'}}, 
+  { user: {email: 'sahar@rbk.org', password: 'saher2017'}} 
+];
